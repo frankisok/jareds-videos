@@ -2,8 +2,6 @@
 
 import os
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Any
 
 from google import genai
 from google.genai.types import GenerateVideosConfig
@@ -18,9 +16,14 @@ class VideoGenerationRequest:
     prompt: str
     output_gcs_uri: str
     model: str = "veo-2.0-generate-001"  # Default Veo model
+    negative_prompt: str | None = None
     aspect_ratio: str = "16:9"
     duration_seconds: int = 8
     person_generation: str = "allow_adult"
+    seed: int | None = None
+    enhance_prompt: bool = False
+    generate_audio: bool = True
+    enable_prompt_rewriting: bool = False
 
 
 @dataclass
@@ -64,6 +67,12 @@ class VideoGenerator:
             aspect_ratio=request.aspect_ratio,
             output_gcs_uri=request.output_gcs_uri,
             person_generation=request.person_generation,
+            negative_prompt=request.negative_prompt,
+            duration_seconds=request.duration_seconds,
+            seed=request.seed,
+            enhance_prompt=request.enhance_prompt,
+            generate_audio=request.generate_audio,
+            enable_prompt_rewriting=request.enable_prompt_rewriting,
         )
 
         operation = self.client.models.generate_videos(
@@ -98,6 +107,12 @@ class VideoGenerator:
             aspect_ratio=request.aspect_ratio,
             output_gcs_uri=request.output_gcs_uri,
             person_generation=request.person_generation,
+            negative_prompt=request.negative_prompt,
+            duration_seconds=request.duration_seconds,
+            seed=request.seed,
+            enhance_prompt=request.enhance_prompt,
+            generate_audio=request.generate_audio,
+            enable_prompt_rewriting=request.enable_prompt_rewriting,
         )
 
         operation = await self.client.aio.models.generate_videos(
